@@ -11,6 +11,7 @@ module.exports = function(RED) {
         this.timeLimitType = config.timeLimitType || "seconds";
         this.timeLimit = Number(config.timeLimit || 0);
         this.countLimit = Number(config.countLimit || 0);
+        this.blockSize = Number(config.blockSize || 0);
         this.locked = config.locked || false;
 
         // helpers
@@ -66,6 +67,23 @@ module.exports = function(RED) {
                 }
                 else if( msg.reset ) {
                     node.reset = false;
+                }
+            }
+
+            // throttle by blocks size
+            else if( node.throttleType === "blocksize" ) {
+                if( isNaN(node.blockSize) || !isFinite(node.blockSize) ) {
+                    return this.error("block size is not numeric", msg);
+                }
+
+                ++node.count;
+
+                if( node.count <= node.blockSize ) {
+                    node.send(msg);
+                }
+
+                if( msg.reset ) {
+                    node.count = 0;
                 }
             }
 

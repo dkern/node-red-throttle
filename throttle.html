@@ -8,6 +8,7 @@
         <select id="node-input-throttleType" style="width: 70%">
             <option value="time">by time</option>
             <option value="count">by count</option>
+            <option value="blocksize">by block size</option>
             <option value="reset">by reset</option>
         </select>
     </div>
@@ -19,6 +20,10 @@
     <div class="form-row throttle-limit-row hidden" id="throttle-limit-row-count">
         <label for="node-input-countLimit"><i class="fa fa-hashtag"></i> Count Limit</label>
         <input type="text" id="node-input-countLimit" placeholder="0">
+    </div>
+    <div class="form-row throttle-limit-row hidden" id="throttle-limit-row-blocksize">
+        <label for="node-input-blockSize"><i class="fa fa-hashtag"></i> Block size</label>
+        <input type="text" id="node-input-blockSize" placeholder="0">
     </div>
     <div class="form-row">
         <label>&nbsp;</label>
@@ -36,6 +41,10 @@
     <p><strong>By Count:</strong><br/>
     Limits the passed through messages by a given count.
     For example: setting the node to a count of <code>5</code> means, that only every fifth message will be forwarded.</p>
+    <p><strong>By Block Size:</strong><br/>
+    Limits the passed through messages by a given block size.
+    The counter will be reset when a message with <code>msg.reset</code> was received.
+    For example: setting the node to a block size of <code>5</code> means, that only the first five messages will be forwarded.</p>
     <p><strong>By Reset:</strong><br/>
     Will only pass through a single message, when a message with <code>msg.reset</code> was received before.</p>
     <p>Every other messages will be dropped!</p>
@@ -50,6 +59,7 @@
             timeLimit: {value:0,validate:RED.validators.number()},
             timeLimitType: {value:"seconds"},
             countLimit: {value:0,validate:RED.validators.number()},
+            blockSize: {value:0,validate:RED.validators.number()},
             locked: {value:false}
         },
         color:"#e6e0f8",
@@ -66,6 +76,7 @@
             // defaults
             this.throttleType = !this.throttleType ? "time" : this.throttleType;
             this.countLimit = !this.countLimit ? 0 : this.countLimit;
+            this.blockSize = !this.blockSize ? 0 : this.blockSize;
             this.timeLimit = !this.timeLimit ? 0 : this.timeLimit;
             this.timeLimitType = !this.timeLimitType ? "seconds" : this.timeLimitType;
 
