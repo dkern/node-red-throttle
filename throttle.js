@@ -15,16 +15,20 @@ module.exports = function(RED) {
         this.locked = config.locked || false;
 
         // helpers
-        this.time = this.locked ? Math.floor(Date.now() / 1000) : 0;
+        this.time = this.locked ? Math.floor(Date.now()) : 0;
         this.count = this.locked ? 1 : 0;
-        this.reset = this.locked ? true : false;
+        this.block = this.locked ? this.blockSize + 1 : 0;
+        this.reset = !!this.locked;
 
-        // calculate time limit in seconds
+        // calculate time limit in milliseconds
         if( this.timeLimitType === "hours" ) {
-            this.timeLimit *= 60 * 60;
+            this.timeLimit *= 60 * 60 * 1000;
         }
         else if( this.timeLimitType === "minutes" ) {
-            this.timeLimit *= 60;
+            this.timeLimit *= 60 * 1000;
+        }
+        else if( this.timeLimitType === "seconds" ) {
+            this.timeLimit *= 1000;
         }
 
         this.on("input", function(msg) {
@@ -34,7 +38,7 @@ module.exports = function(RED) {
                     return this.error("time limit is not numeric", msg);
                 }
 
-                var now = Math.floor(Date.now() / 1000);
+                var now = Math.floor(Date.now());
 
                 if( node.time + node.timeLimit < now ) {
                     node.time = now;
@@ -59,6 +63,22 @@ module.exports = function(RED) {
                 }
             }
 
+            // throttle by block size
+            else if( node.throttleType === "block" ) {
+                if( isNaN(node.blockSize) || !isFinite(node.blockSize) ) {
+                    return this.error("block size is not numeric", msg);
+                }
+
+                ++node.block;
+
+                if( node.block <= node.blockSize ) {
+                    node.send(msg);
+                }
+                else if( msg.reset ) {
+                    node.block = 0;
+                }
+            }
+
             // throttle by reset
             else if( node.throttleType === "reset" ) {
                 if( !node.reset ) {
@@ -67,23 +87,6 @@ module.exports = function(RED) {
                 }
                 else if( msg.reset ) {
                     node.reset = false;
-                }
-            }
-
-            // throttle by blocks size
-            else if( node.throttleType === "blocksize" ) {
-                if( isNaN(node.blockSize) || !isFinite(node.blockSize) ) {
-                    return this.error("block size is not numeric", msg);
-                }
-
-                ++node.count;
-
-                if( node.count <= node.blockSize ) {
-                    node.send(msg);
-                }
-
-                if( msg.reset ) {
-                    node.count = 0;
                 }
             }
 

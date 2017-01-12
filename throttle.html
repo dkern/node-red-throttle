@@ -8,7 +8,7 @@
         <select id="node-input-throttleType" style="width: 70%">
             <option value="time">by time</option>
             <option value="count">by count</option>
-            <option value="blocksize">by block size</option>
+            <option value="block">by block size</option>
             <option value="reset">by reset</option>
         </select>
     </div>
@@ -21,8 +21,8 @@
         <label for="node-input-countLimit"><i class="fa fa-hashtag"></i> Count Limit</label>
         <input type="text" id="node-input-countLimit" placeholder="0">
     </div>
-    <div class="form-row throttle-limit-row hidden" id="throttle-limit-row-blocksize">
-        <label for="node-input-blockSize"><i class="fa fa-hashtag"></i> Block size</label>
+    <div class="form-row throttle-limit-row hidden" id="throttle-limit-row-block">
+        <label for="node-input-blockSize"><i class="fa fa-hashtag"></i> Block Size</label>
         <input type="text" id="node-input-blockSize" placeholder="0">
     </div>
     <div class="form-row">
@@ -67,7 +67,7 @@
         outputs: 1,
         icon: "throttle.png",
         label: function() {
-           return this.name || "throttle";
+            return this.name || "throttle";
         },
         labelStyle: function() {
             return this.name ? "node_label_italic" : "";
@@ -91,6 +91,7 @@
                 default: "seconds",
                 typeField: $("#node-input-timeLimitType"),
                 types: [
+                    {value: "milliseconds", label: "milliseconds", hasValue: true},
                     {value: "seconds", label: "seconds", hasValue: true},
                     {value: "minutes", label: "minutes", hasValue: true},
                     {value: "hours", label: "hours", hasValue: true}

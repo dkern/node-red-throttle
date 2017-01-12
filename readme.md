@@ -18,6 +18,7 @@ A <a href="http://nodered.org" target="_new">Node-RED</a> node to throttle down 
 * [Example Flows](#example-flows)
   * [Example by Time](#example-by-time)
   * [Example by Count](#example-by-count)
+  * [Example by Block Size](#example-by-block-size)
   * [Example by Reset](#example-by-reset)
 * [Bugs / Feature request](#bugs--feature-request)
 * [License](#license)
@@ -68,7 +69,7 @@ Simple examples showing how to use the throttle and it's output.
 ![example1.png](./doc/example1.png)
 
 ```JSON
-[{"id":"81be4802.e74478","type":"function","z":"8a25646f.9d541","name":"info msg","func":"msg.payload = \"injected\";\nreturn msg;","outputs":1,"noerr":0,"x":620,"y":120,"wires":[["789ee5ac.32e214"]]},{"id":"789ee5ac.32e214","type":"debug","z":"8a25646f.9d541","name":"output","active":true,"console":"false","complete":"payload","x":750,"y":140,"wires":[]},{"id":"99fbadf5.9b42e8","type":"throttle","z":"8a25646f.9d541","name":"","throttleType":"time","timeLimit":"3","timeLimitType":"seconds","countLimit":"3","locked":false,"x":620,"y":160,"wires":[["789ee5ac.32e214"]]},{"id":"681f30ee.8f3598","type":"inject","z":"8a25646f.9d541","name":"inject","topic":"","payload":"!!! PASSED THROUGH !!!","payloadType":"str","repeat":"","crontab":"","once":false,"x":490,"y":140,"wires":[["99fbadf5.9b42e8","81be4802.e74478"]]}]
+[{"id":"81be4802.e74478","type":"function","z":"8a25646f.9d541","name":"info msg","func":"msg.payload = \"injected\";\nreturn msg;","outputs":1,"noerr":0,"x":800,"y":60,"wires":[["789ee5ac.32e214"]]},{"id":"789ee5ac.32e214","type":"debug","z":"8a25646f.9d541","name":"output","active":true,"console":"false","complete":"payload","x":950,"y":80,"wires":[]},{"id":"99fbadf5.9b42e8","type":"throttle","z":"8a25646f.9d541","name":"","throttleType":"time","timeLimit":"3","timeLimitType":"seconds","countLimit":"3","blockSize":0,"locked":false,"x":800,"y":100,"wires":[["789ee5ac.32e214"]]},{"id":"681f30ee.8f3598","type":"inject","z":"8a25646f.9d541","name":"inject","topic":"","payload":"!!! PASSED THROUGH !!!","payloadType":"str","repeat":"","crontab":"","once":false,"x":650,"y":80,"wires":[["99fbadf5.9b42e8","81be4802.e74478"]]}]
 ```
 
 
@@ -77,16 +78,25 @@ Simple examples showing how to use the throttle and it's output.
 ![example2.png](./doc/example2.png)
 
 ```JSON
-[{"id":"a3d7f710.99f97","type":"debug","z":"8a25646f.9d541","name":"output","active":true,"console":"false","complete":"payload","x":750,"y":260,"wires":[]},{"id":"e2c6599a.0b5c98","type":"function","z":"8a25646f.9d541","name":"info msg","func":"msg.payload = \"injected\";\nreturn msg;","outputs":1,"noerr":0,"x":620,"y":240,"wires":[["a3d7f710.99f97"]]},{"id":"8a2c177f.24e0c8","type":"throttle","z":"8a25646f.9d541","name":"","throttleType":"count","timeLimit":"10","timeLimitType":"seconds","countLimit":"3","locked":false,"x":620,"y":280,"wires":[["a3d7f710.99f97"]]},{"id":"836ebd21.ad25","type":"inject","z":"8a25646f.9d541","name":"inject","topic":"","payload":"!!! PASSED THROUGH !!!","payloadType":"str","repeat":"","crontab":"","once":false,"x":490,"y":260,"wires":[["8a2c177f.24e0c8","e2c6599a.0b5c98"]]}]
+[{"id":"a3d7f710.99f97","type":"debug","z":"8a25646f.9d541","name":"output","active":true,"console":"false","complete":"payload","x":950,"y":200,"wires":[]},{"id":"e2c6599a.0b5c98","type":"function","z":"8a25646f.9d541","name":"info msg","func":"msg.payload = \"injected\";\nreturn msg;","outputs":1,"noerr":0,"x":800,"y":180,"wires":[["a3d7f710.99f97"]]},{"id":"8a2c177f.24e0c8","type":"throttle","z":"8a25646f.9d541","name":"","throttleType":"count","timeLimit":"10","timeLimitType":"seconds","countLimit":"3","blockSize":0,"locked":false,"x":800,"y":220,"wires":[["a3d7f710.99f97"]]},{"id":"836ebd21.ad25","type":"inject","z":"8a25646f.9d541","name":"inject","topic":"","payload":"!!! PASSED THROUGH !!!","payloadType":"str","repeat":"","crontab":"","once":false,"x":650,"y":200,"wires":[["8a2c177f.24e0c8","e2c6599a.0b5c98"]]}]
+```
+
+
+### Example by Block Size
+
+![example3.png](./doc/example3.png)
+
+```JSON
+[{"id":"32aac7a2.1c4d2","type":"function","z":"8a25646f.9d541","name":"info msg","func":"msg.payload = \"injected\";\nreturn msg;","outputs":1,"noerr":0,"x":800,"y":300,"wires":[["cc05fc6b.4e2598"]]},{"id":"ad1cf860.9c085","type":"throttle","z":"8a25646f.9d541","name":"","throttleType":"block","timeLimit":"10","timeLimitType":"seconds","countLimit":"3","blockSize":"3","locked":false,"x":800,"y":340,"wires":[["cc05fc6b.4e2598"]]},{"id":"8925c66d.9381d8","type":"inject","z":"8a25646f.9d541","name":"inject","topic":"","payload":"!!! PASSED THROUGH !!!","payloadType":"str","repeat":"","crontab":"","once":false,"x":490,"y":320,"wires":[["ad1cf860.9c085","32aac7a2.1c4d2"]]},{"id":"8a84f4e3.491f18","type":"inject","z":"8a25646f.9d541","name":"reset","topic":"","payload":"reset","payloadType":"str","repeat":"","crontab":"","once":false,"x":490,"y":380,"wires":[["c83fa727.0f0b3"]]},{"id":"c83fa727.0f0b3","type":"function","z":"8a25646f.9d541","name":"reset msg","func":"msg.reset = true;\nreturn msg;","outputs":1,"noerr":0,"x":620,"y":380,"wires":[["ad1cf860.9c085","cc05fc6b.4e2598"]]},{"id":"cc05fc6b.4e2598","type":"debug","z":"8a25646f.9d541","name":"output","active":true,"console":"false","complete":"payload","x":970,"y":380,"wires":[]}]
 ```
 
 
 ### Example by Reset
 
-![example3.png](./doc/example3.png)
+![example4.png](./doc/example4.png)
 
 ```JSON
-[{"id":"4e11480f.2fad28","type":"function","z":"8a25646f.9d541","name":"info msg","func":"msg.payload = \"injected\";\nreturn msg;","outputs":1,"noerr":0,"x":740,"y":400,"wires":[["c1d324bd.d2feb8"]]},{"id":"50915215.704714","type":"throttle","z":"8a25646f.9d541","name":"","throttleType":"reset","timeLimit":"10","timeLimitType":"seconds","countLimit":"3","locked":false,"x":740,"y":440,"wires":[["c1d324bd.d2feb8"]]},{"id":"4ba961e0.c018c8","type":"inject","z":"8a25646f.9d541","name":"inject","topic":"","payload":"!!! PASSED THROUGH !!!","payloadType":"str","repeat":"","crontab":"","once":false,"x":430,"y":420,"wires":[["50915215.704714","4e11480f.2fad28"]]},{"id":"f786e09d.1cdfa","type":"inject","z":"8a25646f.9d541","name":"reset","topic":"","payload":"reset","payloadType":"str","repeat":"","crontab":"","once":false,"x":430,"y":480,"wires":[["bbf770bd.df0768"]]},{"id":"bbf770bd.df0768","type":"function","z":"8a25646f.9d541","name":"reset msg","func":"msg.reset = true;\nreturn msg;","outputs":1,"noerr":0,"x":560,"y":480,"wires":[["50915215.704714","c1d324bd.d2feb8"]]},{"id":"c1d324bd.d2feb8","type":"debug","z":"8a25646f.9d541","name":"output","active":true,"console":"false","complete":"payload","x":910,"y":480,"wires":[]}]
+[{"id":"4e11480f.2fad28","type":"function","z":"8a25646f.9d541","name":"info msg","func":"msg.payload = \"injected\";\nreturn msg;","outputs":1,"noerr":0,"x":800,"y":460,"wires":[["c1d324bd.d2feb8"]]},{"id":"50915215.704714","type":"throttle","z":"8a25646f.9d541","name":"","throttleType":"reset","timeLimit":"10","timeLimitType":"seconds","countLimit":"3","blockSize":0,"locked":false,"x":800,"y":500,"wires":[["c1d324bd.d2feb8"]]},{"id":"4ba961e0.c018c8","type":"inject","z":"8a25646f.9d541","name":"inject","topic":"","payload":"!!! PASSED THROUGH !!!","payloadType":"str","repeat":"","crontab":"","once":false,"x":490,"y":480,"wires":[["50915215.704714","4e11480f.2fad28"]]},{"id":"f786e09d.1cdfa","type":"inject","z":"8a25646f.9d541","name":"reset","topic":"","payload":"reset","payloadType":"str","repeat":"","crontab":"","once":false,"x":490,"y":540,"wires":[["bbf770bd.df0768"]]},{"id":"bbf770bd.df0768","type":"function","z":"8a25646f.9d541","name":"reset msg","func":"msg.reset = true;\nreturn msg;","outputs":1,"noerr":0,"x":620,"y":540,"wires":[["50915215.704714","c1d324bd.d2feb8"]]},{"id":"c1d324bd.d2feb8","type":"debug","z":"8a25646f.9d541","name":"output","active":true,"console":"false","complete":"payload","x":970,"y":540,"wires":[]}]
 ```
 
 
