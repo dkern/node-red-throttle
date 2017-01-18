@@ -14,6 +14,7 @@ A <a href="http://nodered.org" target="_new">Node-RED</a> node to throttle down 
 * [Usage](#usage)
   * [By Time](#by-time)
   * [By Count](#by-count)
+  * [By Block Size](#by-block-size)
   * [By Reset](#by-reset)
 * [Example Flows](#example-flows)
   * [Example by Time](#example-by-time)
