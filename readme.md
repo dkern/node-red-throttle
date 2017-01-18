@@ -54,6 +54,13 @@ Limits the passed through messages by a given count.
 **For example:** setting the node to a count of `5` means, that only every fifth message will be forwarded.
 
 
+### By Block Size
+
+Limits the passed through messages by a given block size.
+The counter will be reset when a message with `msg.reset` was received.  
+**For example:** setting the node to a block size of `5` means, that only the first five messages will be forwarded.
+
+
 ### By Reset
 
 Will only pass through a single message, when a message with `msg.reset` was received before.
