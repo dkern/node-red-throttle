@@ -10,28 +10,50 @@ module.exports = function(RED) {
         this.throttleType = config.throttleType || "time";
         this.timeLimitType = config.timeLimitType || "seconds";
         this.timeLimit = Number(config.timeLimit || 0);
+        this.periodLimitType = config.periodLimitType || "seconds";
+        this.periodLimit = Number(config.periodLimit || 0);
         this.countLimit = Number(config.countLimit || 0);
         this.blockSize = Number(config.blockSize || 0);
         this.locked = config.locked || false;
+        this.resend = config.resend || false;
 
-        // helpers
-        this.time = this.locked ? Math.floor(Date.now()) : 0;
-        this.count = this.locked ? 1 : 0;
-        this.block = this.locked ? this.blockSize + 1 : 0;
-        this.reset = !!this.locked;
+        function initialize(locked, node) {
+            node.time = locked ? Math.floor(Date.now()) : 0;
+            node.period = locked ? 0 : Math.floor(Date.now());
+            node.count = locked ? 1 : 0;
+            node.block = locked ? node.blockSize + 1 : 0;
+            node.reset = !!locked;
+        }
+        
+        // Initialize the current status, based on the 'locked' property
+        initialize(this.locked, this);
 
-        // calculate time limit in milliseconds
-        if( this.timeLimitType === "hours" ) {
-            this.timeLimit *= 60 * 60 * 1000;
+        // calculate limit in milliseconds
+        function getMilliSeconds(limitType, limit) {
+            if( limitType === "hours" ) {
+                return limit * 60 * 60 * 1000;
+            }
+            else if( limitType === "minutes" ) {
+                return limit * 60 * 1000;
+            }
+            else if( limitType === "seconds" ) {
+                 return limit * 1000;
+            }
         }
-        else if( this.timeLimitType === "minutes" ) {
-            this.timeLimit *= 60 * 1000;
-        }
-        else if( this.timeLimitType === "seconds" ) {
-            this.timeLimit *= 1000;
-        }
+        
+        this.timeLimit = getMilliSeconds(this.timeLimitType, this.timeLimit);
+        this.periodLimit = getMilliSeconds(this.periodLimitType, this.periodLimit);
 
         this.on("input", function(msg) {
+            if( msg.reset) {
+                initialize(false, node);
+                
+                if( node.resend !== true) {
+                    // When a 'reset' message shouldn't be resended (on the output port), just skip it ...
+                    return;
+                }
+            }
+            
             // throttle by time
             if( node.throttleType === "time" ) {
                 if( isNaN(node.timeLimit) || !isFinite(node.timeLimit) ) {
@@ -42,6 +64,19 @@ module.exports = function(RED) {
 
                 if( node.time + node.timeLimit < now ) {
                     node.time = now;
+                    node.send(msg);
+                }
+            }
+            
+            // throttle by period
+            else if( node.throttleType === "period" ) {
+                if( isNaN(node.periodLimit) || !isFinite(node.periodLimit) ) {
+                    return this.error("period limit is not numeric", msg);
+                }
+
+                var now = Math.floor(Date.now());
+
+                if( node.period + node.periodLimit > now ) {
                     node.send(msg);
                 }
             }
@@ -74,9 +109,6 @@ module.exports = function(RED) {
                 if( node.block <= node.blockSize ) {
                     node.send(msg);
                 }
-                else if( msg.reset ) {
-                    node.block = 0;
-                }
             }
 
             // throttle by reset
@@ -85,11 +117,7 @@ module.exports = function(RED) {
                     node.reset = true;
                     node.send(msg);
                 }
-                else if( msg.reset ) {
-                    node.reset = false;
-                }
             }
-
             // unknown throttle type
             else {
                 this.error("unknown throttle type '" + node.throttleType + "'", msg);
