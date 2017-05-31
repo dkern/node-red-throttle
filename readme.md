@@ -13,11 +13,13 @@ A <a href="http://nodered.org" target="_new">Node-RED</a> node to throttle down 
 * [Install](#install)
 * [Usage](#usage)
   * [By Time](#by-time)
+  * [By Period](#by-period)
   * [By Count](#by-count)
   * [By Block Size](#by-block-size)
   * [By Reset](#by-reset)
 * [Example Flows](#example-flows)
   * [Example by Time](#example-by-time)
+  * [Example by Period](#example-by-period)
   * [Example by Count](#example-by-count)
   * [Example by Block Size](#example-by-block-size)
   * [Example by Reset](#example-by-reset)
@@ -49,6 +51,12 @@ Limits the passed through messages by a given amount of time.
 **For example:** setting the node to `10 seconds` means, that only one message in ten seconds will be forwarded.
 
 
+### By Period
+
+Limits the passed through messages by a given period of time.  
+**For example:** setting the node to `10 seconds` means, that all messages in the first ten seconds will be forwarded.
+
+
 ### By Count
 
 Limits the passed through messages by a given count.  
@@ -78,6 +86,15 @@ Simple examples showing how to use the throttle and it's output.
 
 ```JSON
 [{"id":"81be4802.e74478","type":"function","z":"8a25646f.9d541","name":"info msg","func":"msg.payload = \"injected\";\nreturn msg;","outputs":1,"noerr":0,"x":800,"y":60,"wires":[["789ee5ac.32e214"]]},{"id":"789ee5ac.32e214","type":"debug","z":"8a25646f.9d541","name":"output","active":true,"console":"false","complete":"payload","x":950,"y":80,"wires":[]},{"id":"99fbadf5.9b42e8","type":"throttle","z":"8a25646f.9d541","name":"","throttleType":"time","timeLimit":"3","timeLimitType":"seconds","countLimit":"3","blockSize":0,"locked":false,"x":800,"y":100,"wires":[["789ee5ac.32e214"]]},{"id":"681f30ee.8f3598","type":"inject","z":"8a25646f.9d541","name":"inject","topic":"","payload":"!!! PASSED THROUGH !!!","payloadType":"str","repeat":"","crontab":"","once":false,"x":650,"y":80,"wires":[["99fbadf5.9b42e8","81be4802.e74478"]]}]
+```
+
+
+### Example by Period
+
+![example5.png](./doc/example5.png)
+
+```JSON
+[{"id":"86bd5da0.39e8f","type":"function","z":"6253524.ae0e9ac","name":"info msg","func":"msg.payload = \"injected\";\nreturn msg;","outputs":1,"noerr":0,"x":628.6666259765625,"y":231.99999237060547,"wires":[["da3ceb1e.ec5c88"]]},{"id":"da3ceb1e.ec5c88","type":"debug","z":"6253524.ae0e9ac","name":"output","active":true,"console":"false","complete":"payload","x":778.6666259765625,"y":251.99999237060547,"wires":[]},{"id":"ebe0512b.4e983","type":"throttle","z":"6253524.ae0e9ac","name":"","throttleType":"period","timeLimit":"3","timeLimitType":"seconds","periodLimit":"10","periodLimitType":"seconds","countLimit":"3","blockSize":0,"locked":false,"resend":false,"x":628.6666259765625,"y":271.99999237060547,"wires":[["da3ceb1e.ec5c88"]]},{"id":"e9805de7.44838","type":"inject","z":"6253524.ae0e9ac","name":"inject","topic":"","payload":"!!! PASSED THROUGH !!!","payloadType":"str","repeat":"","crontab":"","once":false,"x":478.6666259765625,"y":251.99999237060547,"wires":[["ebe0512b.4e983","86bd5da0.39e8f"]]}]
 ```
 
 
