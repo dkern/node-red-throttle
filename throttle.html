@@ -40,13 +40,14 @@
     For example: setting the node to <code>10 seconds</code> means, that only one message in ten seconds will be forwarded.</p>
     <p><strong>By Count:</strong><br/>
     Limits the passed through messages by a given count.
+    The counter will be reset when a message with <code>msg.reset</code> was received.
     For example: setting the node to a count of <code>5</code> means, that only every fifth message will be forwarded.</p>
     <p><strong>By Block Size:</strong><br/>
     Limits the passed through messages by a given block size.
     The counter will be reset when a message with <code>msg.reset</code> was received.
     For example: setting the node to a block size of <code>5</code> means, that only the first five messages will be forwarded.</p>
     <p><strong>By Reset:</strong><br/>
-    Will only pass through a single message, when a message with <code>msg.reset</code> was received before.</p>
+    Will only pass through a single message, when a message with <code>msg.reset</code> was received before. Consecutive <code>msg.reset</code> messages will be treated as one.</p>
     <p>Every other messages will be dropped!</p>
 </script>
 
