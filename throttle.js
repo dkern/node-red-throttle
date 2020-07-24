@@ -52,6 +52,11 @@ module.exports = function(RED) {
                     return this.error("count limit is not numeric", msg);
                 }
 
+                if (msg.reset) {
+                    node.count = 0;
+                    return;
+                }
+
                 ++node.count;
 
                 if( node.count >= node.countLimit ) {
@@ -69,24 +74,27 @@ module.exports = function(RED) {
                     return this.error("block size is not numeric", msg);
                 }
 
+                if (msg.reset) {
+                    node.block = 0;
+                    return;
+                }
+
                 ++node.block;
 
                 if( node.block <= node.blockSize ) {
                     node.send(msg);
                 }
-                else if( msg.reset ) {
-                    node.block = 0;
-                }
             }
 
             // throttle by reset
-            else if( node.throttleType === "reset" ) {
+            else if (node.throttleType === "reset") {
+                if (msg.reset) {
+                    node.reset = false;
+                    return;
+                }
                 if( !node.reset ) {
                     node.reset = true;
                     node.send(msg);
-                }
-                else if( msg.reset ) {
-                    node.reset = false;
                 }
             }
 
