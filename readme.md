@@ -1,9 +1,9 @@
 node-red-contrib-throttle
 =========================
 
-[![GitHub version](https://badge.fury.io/gh/eisbehr-%2Fnode-red-throttle.svg)](http://github.com/eisbehr-/node-red-throttle)
+[![GitHub version](https://badge.fury.io/gh/dkern%2Fnode-red-throttle.svg)](http://github.com/dkern/node-red-throttle)
 [![NPM version](https://badge.fury.io/js/node-red-contrib-throttle.svg)](http://www.npmjs.org/package/node-red-contrib-throttle)
-[![Dependencies Status](https://david-dm.org/eisbehr-/node-red-throttle/status.svg)](https://david-dm.org/eisbehr-/node-red-throttle)
+[![Dependencies Status](https://david-dm.org/dkern/node-red-throttle/status.svg)](https://david-dm.org/dkern/node-red-throttle)
 
 A <a href="http://nodered.org" target="_new">Node-RED</a> node to throttle down outgoing messages.
 
@@ -109,7 +109,7 @@ Simple examples showing how to use the throttle and it's output.
 
 
 ## Bugs / Feature request
-Please [report](http://github.com/eisbehr-/node-red-throttle/issues) bugs and feel free to [ask](http://github.com/eisbehr-/node-red-throttle/issues) for new features directly on GitHub.
+Please [report](http://github.com/dkern/node-red-throttle/issues) bugs and feel free to [ask](http://github.com/dkern/node-red-throttle/issues) for new features directly on GitHub.
 
 
 ## License
